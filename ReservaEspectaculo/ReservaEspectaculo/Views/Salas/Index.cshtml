@@ -1,0 +1,49 @@
+﻿@model IEnumerable<ReservaEspectaculo.Models.Sala>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Listado de salas</h1>
+
+<form>
+    <button class="btn btn-primary" asp-action="Create">
+        Alta de sala
+    </button>
+</form>
+<table class="table text-center position-static">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Numero)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TipoSala)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CapacidadButacas)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Numero)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TipoSala.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CapacidadButacas)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Cambiar</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Ver</a> |
+                @*<a asp-action="Delete" asp-route-id="@item.Id">Borrar</a>*@
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

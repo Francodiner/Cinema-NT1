@@ -1,0 +1,56 @@
+﻿@model IEnumerable<ReservaEspectaculo.Models.Funcion>
+
+@{
+    ViewData["Title"] = "Confirmar";
+}
+
+<h1>Confirmar</h1>
+
+<h4>Butacas a reservar: @ViewBag.Butacas</h4>
+
+
+<table class="table text-center position-static">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Fecha)
+            </th>
+            <th>
+                Función
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pelicula)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sala)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Fecha)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Descripcion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Pelicula.Titulo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Sala.Numero)
+                </td>
+                <td>
+                    <a asp-action="Confirmar" asp-route-idFuncion="@item.Id" asp-route-CantButacas="@ViewBag.Butacas">Confirmar</a> 
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <a asp-action="Reservar" asp-route-id="@Model.First().PeliculaId" >Atras</a>
+</div>

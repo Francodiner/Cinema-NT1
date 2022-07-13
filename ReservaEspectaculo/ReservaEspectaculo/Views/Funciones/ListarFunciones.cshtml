@@ -1,0 +1,102 @@
+﻿@inject Microsoft.AspNetCore.Identity.SignInManager<ReservaEspectaculo.Models.Usuario> _siginnmgr
+
+@model IEnumerable<ReservaEspectaculo.Models.Funcion>
+
+@{
+    ViewData["Title"] = "Funciones";
+    var recurso = TempData["Mensaje"] as string;
+}
+
+<h2>Funciones Disponibles</h2>
+<br />
+@if (Model.Count() > 0)
+{
+    <h3>
+        Película: @Html.DisplayFor(modelItem => Model.First().Pelicula.Titulo)
+    </h3>
+}
+<br />
+<h4 class="text-danger">@recurso</h4>
+<table class="table text-center position-static">
+    <thead>
+        <tr>
+            <th>
+                Fecha y Hora
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Descripcion)
+            </th>
+            @if (_siginnmgr.IsSignedIn(User))
+            {
+                <th>
+                    Butacas disponibles
+                </th>
+            }
+            <th>
+                Numero de sala
+            </th>
+            <th>
+                Tipo de sala
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sala.TipoSala.Precio)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fecha)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descripcion)
+            </td>
+            @if (_siginnmgr.IsSignedIn(User))
+            {
+
+                @if (item.ButacarDisponibles == 0)
+                {
+                    <td>
+                        Agotada
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ButacarDisponibles)
+                    </td>
+                }
+            }
+            <td>
+                @Html.DisplayFor(modelItem => item.Sala.Numero)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sala.TipoSala.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sala.TipoSala.Precio)
+            </td>
+            <td>
+                @if (_siginnmgr.IsSignedIn(User))
+                {
+                    @*@if (item.Reservable && @User.IsInRole("Cliente"))
+                    {
+                        <a asp-controller="Reservas" asp-action="Reservar" asp-route-id="@item.Id">Reservar</a>
+                    }*@
+                    @if ((@User.IsInRole("Empleado") || @User.IsInRole("SuperUsuario")) && item.Reservas.Count != 0)
+                    {
+                        <a asp-controller="Reservas" asp-action="ListarReservasEmpleado" asp-route-id="@item.Id">Reservas</a>
+                    }
+                }
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <a asp-action="Index" asp-controller="Home">Atras</a>
+</div>

@@ -1,0 +1,76 @@
+﻿@inject Microsoft.AspNetCore.Identity.SignInManager<ReservaEspectaculo.Models.Usuario> _siginnmgr
+
+@model IEnumerable<ReservaEspectaculo.Models.Pelicula>
+
+@{
+    ViewData["Title"] = "Inicio";
+    var recurso = TempData["Mensaje"] as string;
+}
+    <div class="container-fluid text-center position-static">
+        <h2 class="display-2">Cinema</h2>
+
+        <h3 class="display-4">Cartelera</h3>
+        <h4 class="text-danger">@recurso</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Titulo)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Descripcion)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Genero)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FechaLanzamiento)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Titulo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Descripcion)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Genero.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FechaLanzamiento)
+                    </td>
+                    <td>
+                        @if (item.Funciones.Count != 0)
+                        {
+                            <a asp-action="ListarFunciones" asp-controller="Funciones" asp-route-id="@item.Id">Funciones</a>
+                        }
+                    </td>
+                    <td>
+                        @if (_siginnmgr.IsSignedIn(User))
+                        {
+                            @if (ViewBag.HayReservas == false && item.Funciones.Count != 0 && (@User.IsInRole("Cliente")))
+                            {
+                                <a asp-action="Reservar" asp-controller="Reservas" asp-route-id="@item.Id">Reservar</a>
+                            }
+                        }
+                    </td>
+                    <td>
+                        @if (_siginnmgr.IsSignedIn(User))
+                        {
+                            @if ((@User.IsInRole("Empleado") || @User.IsInRole("SuperUsuario")) && item.Funciones.Count != 0)
+                            {
+                                <a asp-controller="Reservas" asp-action="ListarRecaudacion" asp-route-id="@item.Id">Recaudación</a>
+                            }
+                        }
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>

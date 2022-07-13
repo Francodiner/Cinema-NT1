@@ -1,0 +1,73 @@
+﻿@model IEnumerable<ReservaEspectaculo.Models.Funcion>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Listado de funciones</h1>
+
+<form>
+    <button class="btn btn-primary" asp-action="Create">
+        Alta función
+    </button>
+</form>
+<table class="table text-center position-static">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Fecha)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Descripcion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ButacarDisponibles)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Confirmada)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pelicula)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sala)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fecha)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descripcion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ButacarDisponibles)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Confirmada)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Pelicula.Titulo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sala.Id)
+            </td>
+            <td>
+                @if (item.Reservas.Count == 0)
+                {
+                    <a asp-action="Edit" asp-route-id="@item.Id">Cambiar | </a>
+                }
+                <a asp-action="Details" asp-route-id="@item.Id">Ver</a>
+                @if (item.Reservas.Count == 0)
+                {
+                    <a asp-action="Delete" asp-route-id="@item.Id"> | Borrar</a>
+                }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

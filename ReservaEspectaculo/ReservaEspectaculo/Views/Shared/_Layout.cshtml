@@ -1,0 +1,105 @@
+﻿@inject Microsoft.AspNetCore.Identity.SignInManager<ReservaEspectaculo.Models.Usuario> _siginnmgr
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Reserva Espectaculo</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <a class="navbar-brand" style="color: #C34125" asp-area="" asp-controller="Home" asp-action="Index">Cinema</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                        <a class="nav-link font-weight-bold" style="color:black" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
+                    </li>
+                    @if (_siginnmgr.IsSignedIn(User))
+                    {
+                        @if (@User.IsInRole("Empleado") || @User.IsInRole("SuperUsuario"))
+
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link font-weight-bold" style="color:black" asp-area="" asp-controller="Clientes" asp-action="Index">Clientes</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link font-weight-bold" style="color:black" asp-area="" asp-controller="Empleados" asp-action="Index">Empleados</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link font-weight-bold" style="color:black" asp-area="" asp-controller="Funciones" asp-action="Index">Funciones</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link font-weight-bold" style="color:black" asp-area="" asp-controller="Generos" asp-action="Index">Generos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link font-weight-bold" style="color:black" asp-area="" asp-controller="Peliculas" asp-action="Index">Peliculas</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link font-weight-bold" style="color:black" asp-area="" asp-controller="Reservas" asp-action="Index" asp-route-modo="adelante">Reservas</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link font-weight-bold" style="color:black" asp-area="" asp-controller="Salas" asp-action="Index">Salas</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link font-weight-bold" style="color:black" asp-area="" asp-controller="TipoSalas" asp-action="Index">Tipos de salas</a>
+                            </li>
+                        }
+                        @if (@User.IsInRole("Cliente"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link font-weight-bold" style="color:black" asp-area="" asp-controller="Reservas" asp-action="ListarReservasCliente">Listar Reservas</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link font-weight-bold" style="color:black" asp-area="" asp-controller="Accounts" asp-action="DatosPersonales">Datos personales</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link font-weight-bold" style="color:black" asp-area="" asp-controller="Accounts" asp-action="Logout">Logout</a>
+                            </li>
+                        }
+
+                    }
+                </ul>
+            </div>
+            @if (_siginnmgr.IsSignedIn(User))
+            {
+                <p class="btn btn-outline-secondary">¡Bienvenido <b>@User.FindFirstValue(ClaimTypes.GivenName)</b>!</p>
+
+            }
+            else
+            {
+                <form class="form-inline my-2 my-lg-0">
+                    <a class="nav-link font-weight-bold" style="color:black" asp-area="" asp-controller="Accounts" asp-action="RegistrarCliente">Registrarse</a>
+                    <a class="nav-link font-weight-bold" style="color:black" asp-area="" asp-controller="Accounts" asp-action="Login">Iniciar sesion</a>
+                </form>
+            }
+
+        </nav>
+
+    </header>
+    <div>
+        <div class="container">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    @*<footer class="border-top footer text-muted banner">
+        <div class="container">
+            &copy; 2020 - ReservaEspectaculo
+        </div>
+    </footer>*@
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

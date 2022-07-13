@@ -1,0 +1,75 @@
+﻿@inject Microsoft.AspNetCore.Identity.SignInManager<ReservaEspectaculo.Models.Usuario> _siginnmgr
+
+
+@model IEnumerable<ReservaEspectaculo.Models.Reserva>
+
+@{
+    ViewData["Title"] = "Listado de reservas";
+}
+
+<h1>Listado de reservas</h1>
+
+<h4>@ViewBag.Consulta</h4>
+
+<a class="btn btn-primary" asp-action="Index" asp-route-modo="adelante">Consulta Futuras</a>
+<a class="btn btn-primary" asp-action="Index" asp-route-modo="atras">Consulta Pasadas</a>
+
+<table class="table text-center position-static">
+    <thead>
+        <tr>
+            <th>
+                Fecha de la función
+            </th>
+            <th>
+                Título de la película
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Activa)
+            </th>
+            <th>
+                Cliente
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CantidadButacas)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaAlta)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Funcion.Fecha)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Funcion.Pelicula.Titulo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Activa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cliente.Apellido)
+                @Html.DisplayFor(modelItem => item.Cliente.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CantidadButacas)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaAlta)
+            </td>
+            <td>
+                @if (item.Activa == true && item.Funcion.Fecha > DateTime.Now)
+                {
+                    <a asp-action="CancelarPorEmpleado" asp-route-id="@item.Id">Cancelar |</a>
+                }
+                <a asp-action="Details" asp-route-id="@item.Id">Ver</a>
+            </td>
+        </tr>
+        }              
+
+    </tbody>
+</table>

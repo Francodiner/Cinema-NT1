@@ -1,0 +1,55 @@
+﻿@model IEnumerable<ReservaEspectaculo.Models.Reserva>
+
+
+<table class="table text-center position-static">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Funcion.Fecha)
+            </th>
+            <th>
+                Pelicula
+            </th>
+            <th>
+                Sala Numero
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CantidadButacas)
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Funcion.Fecha)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Funcion.Pelicula.Titulo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Funcion.Sala.Numero)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CantidadButacas)
+            </td>
+            
+            <td>
+                @if (item.Cancelable)
+                {
+                    <a asp-controller="Reservas" asp-action="Cancelar" asp-route-id="@item.Id">Cancelar</a>
+                }
+                else
+                {
+                    @if (!item.Activa)
+                    {
+                        <label style="color:red">cancelada</label>
+                    }
+                }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
